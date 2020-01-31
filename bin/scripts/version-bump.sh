@@ -1,5 +1,6 @@
-#!/bin/bash
-# version: 1.1.0
+#!/usr/bin/env bash
+# Nerd Fonts Version: 2.1.0
+# Script Version: 1.0.1
 # bump version number for release in scripts (bash and python)
 # does not do semver format checking
 # this obviously is not perfect but works good enough for now (YAGNI)
@@ -15,9 +16,13 @@ fi
 
 release=$1
 
-sed -i "s|[0-9]\.[0-9]\.[0-9]|$release|g" ../../font-patcher
-sed -i "s|\# version: [0-9]\.[0-9]\.[0-9]|\# version: $release|g" ../../bin/scripts/*.sh
-sed -i "s|version=\"[0-9]\.[0-9]\.[0-9]\"|version=\"$release\"|g" ../../bin/scripts/*.sh
+sed -i "s|[0-9]\\.[0-9]\\.[0-9]|$release|g" ../../font-patcher
+sed -i "s|\\# Nerd Fonts Version: [0-9]\\.[0-9]\\.[0-9]|\\# Nerd Fonts Version: $release|g" ../../bin/scripts/**/*.sh
+sed -i "s|\\# Nerd Fonts Version: [0-9]\\.[0-9]\\.[0-9]|\\# Nerd Fonts Version: $release|g" ../../bin/scripts/**/*.py
+sed -i "s|\\# Nerd Fonts Version: [0-9]\\.[0-9]\\.[0-9]|\\# Nerd Fonts Version: $release|g" ../../bin/scripts/*.sh
+sed -i "s|\\# Nerd Fonts Version: [0-9]\\.[0-9]\\.[0-9]|\\# Nerd Fonts Version: $release|g" ../../bin/scripts/*.py
+sed -i "s|\\# version: [0-9]\\.[0-9]\\.[0-9]|\\# version: $release|g" ../../bin/scripts/*.sh
+sed -i "s|version=\"[0-9]\\.[0-9]\\.[0-9]\"|version=\"$release\"|g" ../../bin/scripts/*.sh
 
 exit
 

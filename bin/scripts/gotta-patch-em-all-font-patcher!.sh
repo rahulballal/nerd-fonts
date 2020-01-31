@@ -1,8 +1,9 @@
-#!/bin/bash
-# version: 1.1.0
+#!/usr/bin/env bash
+# Nerd Fonts Version: 2.1.0
+# Script Version: 1.1.1
 
-# used for debugging
-#set -x
+  # used for debugging
+  #set -x
 
 # for executing script to rebuild JUST the readmes:
 # ./gotta-patch-em-all-font-patcher\!.sh "" info
@@ -51,7 +52,7 @@ fi
 source_fonts=()
  while IFS= read -d $'\0' -r file ; do
      source_fonts=("${source_fonts[@]}" "$file")
- done < <(find "$source_fonts_dir" -name "$like_pattern*.[o,t]tf" -type f -print0)
+ done < <(find "$source_fonts_dir" -iname "$like_pattern*.[o,t]tf" -type f -print0)
 
 # print total number of source fonts found
 echo "$LINE_PREFIX Total source fonts found: ${#source_fonts[*]}"
@@ -75,10 +76,20 @@ function patch_font {
   # source the font config file if exists:
   if [ -f "$config_dir/config.cfg" ]
   then
+    # shellcheck source=/dev/null
     source "$config_dir/config.cfg"
   elif [ -f "$config_parent_dir/config.cfg" ]
   then
+    # shellcheck source=/dev/null
     source "$config_parent_dir/config.cfg"
+  fi
+
+  if [ -f "$config_parent_dir/config.json" ]
+  then
+    # load font configuration file and remove ligatures (for mono fonts):
+    font_config="--removeligatures --configfile $config_parent_dir/config.json"
+  else
+    font_config=""
   fi
 
   if [ "$post_process" ]
@@ -88,13 +99,15 @@ function patch_font {
     post_process=""
   fi
 
+  # shellcheck disable=SC2154
+  # we know the '$config_has_powerline' is from the sourced file
   if [ "$config_has_powerline" ]
   then
     powerline=""
-    combinations=$(printf "./font-patcher ${f##*/} %s\n" {' --use-single-width-glyphs',}{' --windows',}{' --fontawesome',}{' --octicons',}{' --fontlinux',}{' --pomicons',}{' --powerlineextra',}{' --fontawesomeextension',}{' --powersymbols',})
+    combinations=$(printf "./font-patcher ${f##*/} %s\\n" {' --use-single-width-glyphs',}{' --windows',}{' --fontawesome',}{' --octicons',}{' --fontlinux',}{' --pomicons',}{' --powerlineextra',}{' --fontawesomeextension',}{' --powersymbols',}{' --weather',}{' --material',})
   else
     powerline="--powerline"
-    combinations=$(printf "./font-patcher ${f##*/} %s\n" {' --powerline',}{' --use-single-width-glyphs',}{' --windows',}{' --fontawesome',}{' --octicons',}{' --fontlinux',}{' --pomicons',}{' --powerlineextra',}{' --fontawesomeextension',}{' --powersymbols',})
+    combinations=$(printf "./font-patcher ${f##*/} %s\\n" {' --powerline',}{' --use-single-width-glyphs',}{' --windows',}{' --fontawesome',}{' --octicons',}{' --fontlinux',}{' --pomicons',}{' --powerlineextra',}{' --fontawesomeextension',}{' --powersymbols',}{' --weather',}{' --material',})
   fi
 
   cd "$parent_dir" || {
@@ -103,9 +116,9 @@ function patch_font {
   }
 
   fontforge -quiet -script ./font-patcher "$f" -q $powerline $post_process --complete --no-progressbars --outputdir "${patched_font_dir}complete/" 2>/dev/null
-  fontforge -quiet -script ./font-patcher "$f" -q -s $powerline $post_process --complete --no-progressbars --outputdir "${patched_font_dir}complete/" 2>/dev/null
+  fontforge -quiet -script ./font-patcher "$f" -q -s ${font_config} $powerline $post_process --complete --no-progressbars --outputdir "${patched_font_dir}complete/" 2>/dev/null
   fontforge -quiet -script ./font-patcher "$f" -q -w $powerline $post_process --complete --no-progressbars --outputdir "${patched_font_dir}complete/" 2>/dev/null
-  fontforge -quiet -script ./font-patcher "$f" -q -s -w $powerline $post_process --complete --no-progressbars --outputdir "${patched_font_dir}complete/" 2>/dev/null
+  fontforge -quiet -script ./font-patcher "$f" -q -s ${font_config} -w $powerline $post_process --complete --no-progressbars --outputdir "${patched_font_dir}complete/" 2>/dev/null
   # wait for this group of background processes to finish to avoid forking too many processes
   # that can add up quickly with the number of combinations
   #wait
@@ -138,19 +151,21 @@ function generate_info {
   # source the font config file if exists:
   if [ -f "$config_dir/config.cfg" ]
   then
+    # shellcheck source=/dev/null
     source "$config_dir/config.cfg"
   elif [ -f "$config_parent_dir/config.cfg" ]
   then
+    # shellcheck source=/dev/null
     source "$config_parent_dir/config.cfg"
   fi
 
   if [ "$config_has_powerline" ]
   then
     powerline=""
-    combinations=$(printf "./font-patcher ${f##*/} %s\n" {' --use-single-width-glyphs',}{' --windows',}{' --fontawesome',}{' --octicons',}{' --fontlinux',}{' --pomicons',}{' --powerlineextra',}{' --fontawesomeextension',}{' --powersymbols',})
+    combinations=$(printf "./font-patcher ${f##*/} %s\\n" {' --use-single-width-glyphs',}{' --windows',}{' --fontawesome',}{' --octicons',}{' --fontlinux',}{' --pomicons',}{' --powerlineextra',}{' --fontawesomeextension',}{' --powersymbols',}{' --weather',}{' --material',})
   else
     powerline="--powerline"
-    combinations=$(printf "./font-patcher ${f##*/} %s\n" {' --powerline',}{' --use-single-width-glyphs',}{' --windows',}{' --fontawesome',}{' --octicons',}{' --fontlinux',}{' --pomicons',}{' --powerlineextra',}{' --fontawesomeextension',}{' --powersymbols',})
+    combinations=$(printf "./font-patcher ${f##*/} %s\\n" {' --powerline',}{' --use-single-width-glyphs',}{' --windows',}{' --fontawesome',}{' --octicons',}{' --fontlinux',}{' --pomicons',}{' --powerlineextra',}{' --fontawesomeextension',}{' --powersymbols',}{' --weather',}{' --material',})
   fi
 
   font_families_count=$((font_families_count+1))
@@ -184,7 +199,7 @@ function generate_readme {
   local font_info="$patched_font_dir/font-info.md"
 
   # clear output file (needed for multiple runs or updates):
-  > "$combinations_filename"
+  true > "$combinations_filename"
 
   if [ -f "$font_info" ];
   then
@@ -202,16 +217,16 @@ function generate_readme {
     # add to the file
     {
       printf "\`\`\`sh"
-      printf "\n# %s Possible Combinations:\n" "$combination_count"
-      printf "\n"
+      printf "\\n# %s Possible Combinations:\\n" "$combination_count"
+      printf "\\n"
       printf "%s" "$combinations"
-      printf "\n"
+      printf "\\n"
       printf "\`\`\`"
     } >> "$combinations_filename"
   fi
 }
 
-if [ ! $info_only ]
+if [ ! "$info_only" ]
 then
   # Iterate through source fonts
   for i in "${!source_fonts[@]}"
@@ -227,7 +242,7 @@ then
     # however we want to run a certain number in parallel to decrease
     # the amount of time patching all the fonts will take
     # for now set a 'wait' for each X set of processes:
-    if [[ $(($i % $max_parallel_process)) == 0 ]];
+    if [[ $((i % max_parallel_process)) == 0 ]];
     then
       echo "$LINE_PREFIX Complete Variation Count after max parallel process is  $complete_variation_count"
       wait
@@ -248,6 +263,8 @@ do
   generate_info "$path" "$i" 2>/dev/null
 done
 
+font_typefaces_count=$(find "${PWD}/../../${patched_parent_dir}/"* -maxdepth 0 -type d | wc -l)
+
 res2=$(date +%s)
 dt=$(echo "$res2 - $res1" | bc)
 dd=$(echo "$dt/86400" | bc)
@@ -257,11 +274,11 @@ dt3=$(echo "$dt2-3600*$dh" | bc)
 dm=$(echo "$dt3/60" | bc)
 ds=$(echo "$dt3-60*$dm" | bc)
 
-printf "$LINE_PREFIX Total runtime: %d:%02d:%02d:%02d\n" "$dd" "$dh" "$dm" "$ds"
+printf "$LINE_PREFIX Total runtime: %d:%02d:%02d:%02d\\n" "$dd" "$dh" "$dm" "$ds"
 
-printf "# All fonts patched to sub-directories in \t\t\t'%s'\n" "$patched_parent_dir"
-printf "# The total number of font typefaces patched was \t\t'%s'\n" "$font_typefaces_count"
-printf "# The total number of font families patched was \t\t'%s'\n" "$font_families_count"
-printf "# The total number of 'complete' patched fonts created was \t'%s'\n" "$complete_variation_count"
-printf "# The total number of 'variation' patched fonts created was \t'%s'\n" "$total_variation_count"
-printf "# The total number of patched fonts created was \t\t'%s'\n" "$total_count"
+printf "# All fonts patched to sub-directories in \\t\\t\\t'%s'\\n" "$patched_parent_dir"
+printf "# The total number of font typefaces patched was \\t\\t'%s'\\n" "$font_typefaces_count"
+printf "# The total number of font families patched was \\t\\t'%s'\\n" "$font_families_count"
+printf "# The total number of 'complete' patched fonts created was \\t'%s'\\n" "$complete_variation_count"
+printf "# The total number of 'variation' patched fonts created was \\t'%s'\\n" "$total_variation_count"
+printf "# The total number of patched fonts created was \\t\\t'%s'\\n" "$total_count"

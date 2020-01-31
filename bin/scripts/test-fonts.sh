@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/usr/bin/env bash
+# Nerd Fonts Version: 2.1.0
+# Script Version: 1.0.0
 
 # Given an array of decimal numbers print all unicode codepoint.
 function print-decimal-unicode-range() {
@@ -27,6 +29,8 @@ function print-decimal-unicode-range() {
 
   # add fillers to array to maintain table:
   if [[ "$leftoverSpaces" < "$wrapAt" ]]; then
+    # shellcheck disable=SC2034
+    # needs rework without 'i' var?
     for i in $(seq 1 $leftoverSpaces); do
       originalSequence+=(0)
     done
@@ -34,15 +38,16 @@ function print-decimal-unicode-range() {
 
   local sequenceLength=${#originalSequence[@]}
 
-  printf "%b\n" "$topLine"
+  printf "%b\\n" "$topLine"
 
   for decimalCode in "${originalSequence[@]}"; do
-    local hexCode=$(printf '%x' "${decimalCode}")
+    local hexCode
+    hexCode=$(printf '%x' "${decimalCode}")
     local code="${hexCode}"
-    local char="\u${hexCode}"
+    local char="\\u${hexCode}"
 
     # fill in placeholder cells properly formatted:
-    if [ "${char}" = "\u0" ]; then
+    if [ "${char}" = "\\u0" ]; then
       char=" "
       code="    "
     fi
@@ -63,12 +68,12 @@ function print-decimal-unicode-range() {
       fi
 
       printf "%b%b%b" "$bar" "$allCodes" "$reset_color"
-      printf "\n"
+      printf "\\n"
       printf "%b%b%b" "$bar" "$allChars" "$reset_color"
-      printf "\n"
+      printf "\\n"
 
       if [ "$counter" != "$sequenceLength" ]; then
-        printf "%b\n" "$line"
+        printf "%b\\n" "$line"
       fi
 
       allCodes=""
@@ -77,14 +82,14 @@ function print-decimal-unicode-range() {
 
   done
 
-  printf "%b\n" "$bottomLine"
+  printf "%b\\n" "$bottomLine"
 
 }
 
 function print-unicode-ranges() {
   echo ''
 
-  local arr=($@)
+  local arr=("$@")
   local len=$#
   local combinedRanges=()
 
@@ -94,7 +99,7 @@ function print-unicode-ranges() {
     local startDecimal=$((16#$start))
     local endDecimal=$((16#$end))
 
-    combinedRanges+=($(seq "${startDecimal}" "${endDecimal}"))
+    mapfile -t combinedRanges < <(seq "$startDecimal" "$endDecimal")
 
   done
 
@@ -143,8 +148,16 @@ function test-fonts() {
   print-unicode-ranges 23fb 23fe 2b58 2b58
   echo; echo
 
+  echo "Nerd Fonts - Material Design Icons"
+  print-unicode-ranges f500 fd46
+  echo; echo
+
+  echo "Nerd Fonts - Weather Icons"
+  print-unicode-ranges e300 e3eb
+  echo; echo
+
   echo "Nerd Fonts - All"
-  print-unicode-ranges e000 e00d e0a0 e0a2 e0b0 e0b3 e0a3 e0a3 e0b4 e0c8 e0cc e0d2 e0d4 e0d4 e5fa e62b e700 e7c5 f000 f2e0 e200 e2a9 f400 f4a8 2665 2665 26A1 26A1 f27c f27c f300 f313 23fb 23fe 2b58 2b58
+  print-unicode-ranges e000 e00d e0a0 e0a2 e0b0 e0b3 e0a3 e0a3 e0b4 e0c8 e0cc e0d2 e0d4 e0d4 e5fa e62b e700 e7c5 f000 f2e0 e200 e2a9 f400 f4a8 2665 2665 26A1 26A1 f27c f27c f300 f313 23fb 23fe 2b58 2b58 f500 fd46 e300 e3eb
 
   echo; echo
 }

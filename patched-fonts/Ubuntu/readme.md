@@ -15,7 +15,7 @@ you are expressly encouraged to experiment, modify, share and improve.
 
   http://font.ubuntu.com/
 
-## Why `Fura` and not `Fira`?
+## Why `Terminess` and not `Terminus`?
 
 What's in a name? The reason for the name change is to comply with the SIL Open Font License (OFL), in partcular the [Reserved Font Name mechanism][SIL-RFN]
 
@@ -38,6 +38,11 @@ See the [Reserved Font Name section][SIL-RFN] for additional information
     * This includes specific tweaks to ensure the font works on Windows, in particular monospace identification and font name length limitations
   * If you are limited to monospaced fonts (because of your terminal, etc) then pick a font with the `'Mono'` suffix.
     * This denotes that the Nerd Font glyphs will be monospaced not necessarily that the entire font will be monospaced
+
+### Ligatures
+
+By the *Nerd Font* policy, the variant with the `'Mono'` suffix is not supposed to have any ligatures.
+Use the non-*Mono* variants to have ligatures.
 
 ### Explanation
 

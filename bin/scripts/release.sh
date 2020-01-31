@@ -1,5 +1,5 @@
-#!/bin/bash
-# version: 1.1.0
+#!/usr/bin/env bash
+# Nerd Fonts Version: 2.1.0
 # calls the necessary scripts in the necessary order to prepare for a release
 
 #set -x

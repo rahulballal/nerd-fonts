@@ -2,6 +2,80 @@ CHANGELOG
 ================================================================================
 This project is using [Semantic Versioning 2.0.0](http://semver.org/)
 
+## v2.0.0
+
+### New Features
+
+  - Added new fonts:
+    - Noto (all variations) (#213)
+    - Overpass Mono (fixes #177)
+    - BigBlue Terminal (fixes #170)
+    - Dyslexic (fixes #217)
+    - Iosevka Term variant (no ligatures) (fixes #198)
+    - FiraCode TTF variant (fixes #244)
+    - SourceCodePro italics variant (fixes #236)
+  - Added new glyph sets:
+    - [Material Design Icons](https://github.com/templarian/MaterialDesign)
+    - [Weather](https://github.com/erikflowers/weather-icons)
+  - Added new glyphs to core:
+    - Elm (fixes #172)
+    - Elixir (fixes #228)
+    - Electron (fixes #237)
+  - Added new translations:
+    - Added Traditional Chinese of readme (partially fixes #118) (PR #222) (@MindyTai)
+    - Added French readme (partially fixes #118) (PR #251) (@pgrimaud)
+  - Added ability to remove ligatures via the `--removeligatures` option in `font-patcher`
+  - Added `--configfile` option to `font-patcher`
+
+### Updates / Improvements
+
+  - Updated `Hack` font to latest version (`v3.003`) (fixes #216) (with help from @chrissimpkins)
+  - Updated `Iosevka` to the latest version (`v1.14.0`) (fixes #229)
+  - Updated `Fantasque Sans Mono` to the latest version (`v1.7.2`) (fixes #240)
+  - Updated `MPlus` version from `1.018` to `1.063`
+  - Updated documentation for urxvt wcwidth implementations (fixes #155)
+  - Updated logos and Sankey diagram
+
+### Breaking Updates / Improvements / Changes
+
+  - Updated Font Logos (formerly Font Linux) to latest version (fixes #157)
+
+### Fixes
+
+  - Fixed incorrect exitcode returned from installer (fixes #218) (PR #230 @Phuurl)
+  - Fixed 3270 font not being valid/installable on Windows (fixes #12, #196)
+  - Fixed weather variables script typo (PR #242 @snown)
+  - Fixed Monospaced fonts having ligatures by default (fixed Meslo Mono having ligatures) (fixes #186)
+  - Fixed Hasklig ExtraLight & Light variants (fixes #231)
+
+## v1.2.0
+
+### New Features
+
+  - Added new fonts:
+    - `Arimo` (fixes #206) (PR #207 @Ksbugbee)
+    - `Go-Mono` (PR #199 @bbrks)
+    - `Tinos` (fixes #200) (PR #201 @jerezereh)
+    - `InconsolataLGC` (PR #205 @iloginow)
+    - `Cousine` (fixes #208) (PR #209 @de-olagundoye)
+  - Added Contributors section to Website and Repo (fixes #160) (PR #202, PR #204 @lucasreed)
+  - Added Travis CI and integrated with ShellCheck script (fixes #120) (#212 PR @andrewimeson)
+  - Added new translations:
+    - Added Russian translation of readme (partially fixes #118) (PR #203 @magauran)
+    - Added Mandarin Chinese translation of readme (partially fixes #118) (PR #214 @hiby90hou)
+
+### Updates / Improvements
+
+  - Updated `Hasklig (Hasklug)` font from version `1.0` to `1.1` (fixes #188) (PR #215 @fernandomora)
+  - Updated fontconfig with `monospace` (PR #211 @Tyilo)
+
+### Fixes
+
+  - Fixed font-patcher relative path issues with glyph sources (PR #193 @theGivingTree)
+  - Fixed install script not being callable from other directories (PR #194 @Twanislas)
+  - Fixed broken links (@reujab)
+  - Fixed minor misc readme issues
+
 ## v1.1.0
 
 ### New Features

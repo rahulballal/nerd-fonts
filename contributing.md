@@ -1,5 +1,7 @@
 # Contributing Guide
 
+**Working on your first Pull Request?** You can learn how from this *free* series [How to Contribute to an Open Source Project on GitHub][First PR]
+
 ## How to contribute
 
 * Fork the project from the `master` branch and submit a Pull Request (PR)
@@ -19,6 +21,7 @@
 ### 2. Add original (unpatched) version
 * Add the unpatched version of the font and any readme and/or license files to the `unpatched-sample-fonts` directory inside a new directory
   * e.g. Adding *XYZ Font*, create directory `src/unpatched-fonts/xyz/{PUT FONT FILES HERE}`
+  * Try to make subfolders for each font style (e.g. `src/unpatched-fonts/xyz/bold/{BOLD FONT FILES HERE}`)
 ### 3. Execute basic testing
 * Do a basic test with the new font to ensure it patches correctly and generates a new font file, e.g.
   * `./font-patcher src/unpatched-fonts/XYZ/XYZ.ttf --complete`
@@ -79,3 +82,4 @@
 [Combinations Section]: https://github.com/ryanoasis/nerd-fonts/blob/master/readme.md#combinations
 [Patched Fonts]: https://github.com/ryanoasis/nerd-fonts/blob/master/readme.md#patched-fonts
 [KISS Workflow]: https://github.com/ryanoasis/nerd-fonts/wiki/Development-Workflow#kiss-workflow
+[First PR]: https://egghead.io/series/how-to-contribute-to-an-open-source-project-on-github
